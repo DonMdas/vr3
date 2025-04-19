@@ -4,14 +4,18 @@ using UnityEngine.UI;
 
 public class Promotion_check : MonoBehaviour
 {
-    public TextMeshProUGUI timerText;       // Reference to the Timer's TextMeshProUGUI
-    public TextMeshProUGUI heartRateText;   // Reference to the Heart Rate's TextMeshProUGUI
-    public TextMeshProUGUI resultMessage;   // Result Message to show success/failure
-    public GameObject resultPanel;          // Panel to show results
-    public Button nextLevelButton;          // Button to proceed to next level
+    public TextMeshProUGUI timerText;
+    public TextMeshProUGUI heartRateText;
+    public TextMeshProUGUI resultMessage;
+    public GameObject resultPanel;
 
-    public int healthyHeartRateMin = 60;    // Healthy min heart rate
-    public int healthyHeartRateMax = 100;   // Healthy max heart rate
+    public Button nextLevelButton;
+    public Button exitButton;
+    public Button previousLevelButton;
+    public Button tryAgainButton; // 🔹 NEW: Try Again button
+
+    public int healthyHeartRateMin = 60;
+    public int healthyHeartRateMax = 100;
 
     private float totalHeartRate = 0f;
     private int sampleCount = 0;
@@ -19,26 +23,24 @@ public class Promotion_check : MonoBehaviour
 
     void Start()
     {
-        if (resultPanel != null)
-            resultPanel.SetActive(false);
-
-        if (nextLevelButton != null)
-            nextLevelButton.gameObject.SetActive(false);
+        resultPanel?.SetActive(false);
+        nextLevelButton?.gameObject.SetActive(false);
+        exitButton?.gameObject.SetActive(false);
+        previousLevelButton?.gameObject.SetActive(false);
+        tryAgainButton?.gameObject.SetActive(false); // 🔹 Hide Try Again at start
     }
 
     void Update()
     {
-        // Check if timer is running (the timer value will decrease, so we check the text itself)
         if (float.TryParse(timerText.text, out float remainingTime) && remainingTime > 0f)
         {
-            // Collect heart rate data while the timer is running
             if (int.TryParse(heartRateText.text, out int currentHR))
             {
                 totalHeartRate += currentHR;
                 sampleCount++;
             }
         }
-        else if (!resultEvaluated) // Timer has stopped
+        else if (!resultEvaluated)
         {
             resultEvaluated = true;
             EvaluateHeartRate();
@@ -47,8 +49,7 @@ public class Promotion_check : MonoBehaviour
 
     void EvaluateHeartRate()
     {
-        if (resultPanel != null)
-            resultPanel.SetActive(true);
+        resultPanel?.SetActive(true);
 
         if (sampleCount == 0)
         {
@@ -62,14 +63,22 @@ public class Promotion_check : MonoBehaviour
         if (averageHR >= healthyHeartRateMin && averageHR <= healthyHeartRateMax)
         {
             resultMessage.text = $"✅ Success! Avg HR: {roundedHR} BPM\nYou can proceed!";
-            if (nextLevelButton != null)
-                nextLevelButton.gameObject.SetActive(true);
+            nextLevelButton?.gameObject.SetActive(true);
+
+            // Hide fail buttons
+            exitButton?.gameObject.SetActive(false);
+            previousLevelButton?.gameObject.SetActive(false);
+            tryAgainButton?.gameObject.SetActive(false); // 🔹
         }
         else
         {
             resultMessage.text = $"❌ Try Again! Avg HR: {roundedHR} BPM\nStay in the healthy zone.";
-            if (nextLevelButton != null)
-                nextLevelButton.gameObject.SetActive(false);
+
+            // Show fail buttons
+            nextLevelButton?.gameObject.SetActive(false);
+            exitButton?.gameObject.SetActive(true);
+            previousLevelButton?.gameObject.SetActive(true);
+            tryAgainButton?.gameObject.SetActive(true); // 🔹 Show Try Again
         }
     }
 
@@ -79,8 +88,12 @@ public class Promotion_check : MonoBehaviour
         sampleCount = 0;
         resultEvaluated = false;
 
-        if (resultMessage != null) resultMessage.text = "";
-        if (resultPanel != null) resultPanel.SetActive(false);
-        if (nextLevelButton != null) nextLevelButton.gameObject.SetActive(false);
+        resultMessage.text = "";
+        resultPanel?.SetActive(false);
+
+        nextLevelButton?.gameObject.SetActive(false);
+        exitButton?.gameObject.SetActive(false);
+        previousLevelButton?.gameObject.SetActive(false);
+        tryAgainButton?.gameObject.SetActive(false); // 🔹
     }
 }

@@ -12,7 +12,7 @@ public class Promotion_check : MonoBehaviour
     public Button nextLevelButton;
     public Button exitButton;
     public Button previousLevelButton;
-    public Button tryAgainButton; // 🔹 NEW: Try Again button
+    public Button tryAgainButton;
 
     public int healthyHeartRateMin = 60;
     public int healthyHeartRateMax = 100;
@@ -21,13 +21,18 @@ public class Promotion_check : MonoBehaviour
     private int sampleCount = 0;
     private bool resultEvaluated = false;
 
+    private SwitchToXRRig rigSwitcher;
+
     void Start()
     {
         resultPanel?.SetActive(false);
         nextLevelButton?.gameObject.SetActive(false);
         exitButton?.gameObject.SetActive(false);
         previousLevelButton?.gameObject.SetActive(false);
-        tryAgainButton?.gameObject.SetActive(false); // 🔹 Hide Try Again at start
+        tryAgainButton?.gameObject.SetActive(false);
+
+        // Cache XR rig switcher reference
+        rigSwitcher = FindObjectOfType<SwitchToXRRig>();
     }
 
     void Update()
@@ -43,45 +48,47 @@ public class Promotion_check : MonoBehaviour
         else if (!resultEvaluated)
         {
             resultEvaluated = true;
+
+            // 🔹 Switch to XR rig for UI interaction
+            rigSwitcher?.SwitchRig();
+
             EvaluateHeartRate();
         }
     }
 
     void EvaluateHeartRate()
-{
-    resultPanel?.SetActive(true);
-
-    if (sampleCount == 0)
     {
-        resultMessage.text = "No heart rate data collected.";
-        return;
+        resultPanel?.SetActive(true);
+
+        if (sampleCount == 0)
+        {
+            resultMessage.text = "No heart rate data collected.";
+            return;
+        }
+
+        float averageHR = totalHeartRate / sampleCount;
+        int roundedHR = Mathf.RoundToInt(averageHR);
+
+        // 🔹 Always show exit button
+        exitButton?.gameObject.SetActive(true);
+
+        if (averageHR >= healthyHeartRateMin && averageHR <= healthyHeartRateMax)
+        {
+            resultMessage.text = $"✅ Success! Avg HR: {roundedHR} BPM\nYou can proceed!";
+            nextLevelButton?.gameObject.SetActive(true);
+
+            previousLevelButton?.gameObject.SetActive(false);
+            tryAgainButton?.gameObject.SetActive(false);
+        }
+        else
+        {
+            resultMessage.text = $"❌ Try Again! Avg HR: {roundedHR} BPM\nStay in the healthy zone.";
+
+            nextLevelButton?.gameObject.SetActive(false);
+            previousLevelButton?.gameObject.SetActive(true);
+            tryAgainButton?.gameObject.SetActive(true);
+        }
     }
-
-    float averageHR = totalHeartRate / sampleCount;
-    int roundedHR = Mathf.RoundToInt(averageHR);
-
-    // 🔹 Always show Exit button
-    exitButton?.gameObject.SetActive(true);
-
-    if (averageHR >= healthyHeartRateMin && averageHR <= healthyHeartRateMax)
-    {
-        resultMessage.text = $"✅ Success! Avg HR: {roundedHR} BPM\nYou can proceed!";
-        nextLevelButton?.gameObject.SetActive(true);
-
-        // Hide fail buttons only
-        previousLevelButton?.gameObject.SetActive(false);
-        tryAgainButton?.gameObject.SetActive(false);
-    }
-    else
-    {
-        resultMessage.text = $"❌ Try Again! Avg HR: {roundedHR} BPM\nStay in the healthy zone.";
-
-        // Show fail buttons
-        nextLevelButton?.gameObject.SetActive(false);
-        previousLevelButton?.gameObject.SetActive(true);
-        tryAgainButton?.gameObject.SetActive(true);
-    }
-}
 
     public void ResetMonitor()
     {
@@ -95,6 +102,6 @@ public class Promotion_check : MonoBehaviour
         nextLevelButton?.gameObject.SetActive(false);
         exitButton?.gameObject.SetActive(false);
         previousLevelButton?.gameObject.SetActive(false);
-        tryAgainButton?.gameObject.SetActive(false); // 🔹
+        tryAgainButton?.gameObject.SetActive(false);
     }
 }

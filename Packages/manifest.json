@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.meta.movement": "file:C:/Users/XRUser/Downloads/Unity-Movement-74.0.0",
+    "com.meta.movement": "file:C:/Users/CSIT304/Downloads/Unity-Movement-74.0.0/Unity-Movement-74.0.0",
     "com.meta.xr.sdk.all": "74.0.3",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "2.7.1",

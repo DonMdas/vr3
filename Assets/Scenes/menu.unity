@@ -445,7 +445,6 @@ GameObject:
   - component: {fileID: 211864266}
   - component: {fileID: 211864265}
   - component: {fileID: 211864267}
-  - component: {fileID: 211864264}
   - component: {fileID: 211864263}
   - component: {fileID: 211864262}
   m_Layer: 0
@@ -508,7 +507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InteractionManager: {fileID: 0}
+  m_InteractionManager: {fileID: 334509463}
   m_Colliders:
   - {fileID: 211864262}
   m_InteractionLayers:
@@ -545,7 +544,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 211864264}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SceneSwitchButton, Assembly-CSharp
         m_MethodName: OnButtonSelected
         m_Mode: 0
@@ -581,18 +580,6 @@ MonoBehaviour:
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
   m_StartingInteractionStrengthFilters: []
---- !u!114 &211864264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 211864260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &211864265
 MonoBehaviour:
   m_ObjectHideFlags: 0

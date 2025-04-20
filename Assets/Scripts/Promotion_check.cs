@@ -48,39 +48,40 @@ public class Promotion_check : MonoBehaviour
     }
 
     void EvaluateHeartRate()
+{
+    resultPanel?.SetActive(true);
+
+    if (sampleCount == 0)
     {
-        resultPanel?.SetActive(true);
-
-        if (sampleCount == 0)
-        {
-            resultMessage.text = "No heart rate data collected.";
-            return;
-        }
-
-        float averageHR = totalHeartRate / sampleCount;
-        int roundedHR = Mathf.RoundToInt(averageHR);
-
-        if (averageHR >= healthyHeartRateMin && averageHR <= healthyHeartRateMax)
-        {
-            resultMessage.text = $"✅ Success! Avg HR: {roundedHR} BPM\nYou can proceed!";
-            nextLevelButton?.gameObject.SetActive(true);
-
-            // Hide fail buttons
-            exitButton?.gameObject.SetActive(false);
-            previousLevelButton?.gameObject.SetActive(false);
-            tryAgainButton?.gameObject.SetActive(false); // 🔹
-        }
-        else
-        {
-            resultMessage.text = $"❌ Try Again! Avg HR: {roundedHR} BPM\nStay in the healthy zone.";
-
-            // Show fail buttons
-            nextLevelButton?.gameObject.SetActive(false);
-            exitButton?.gameObject.SetActive(true);
-            previousLevelButton?.gameObject.SetActive(true);
-            tryAgainButton?.gameObject.SetActive(true); // 🔹 Show Try Again
-        }
+        resultMessage.text = "No heart rate data collected.";
+        return;
     }
+
+    float averageHR = totalHeartRate / sampleCount;
+    int roundedHR = Mathf.RoundToInt(averageHR);
+
+    // 🔹 Always show Exit button
+    exitButton?.gameObject.SetActive(true);
+
+    if (averageHR >= healthyHeartRateMin && averageHR <= healthyHeartRateMax)
+    {
+        resultMessage.text = $"✅ Success! Avg HR: {roundedHR} BPM\nYou can proceed!";
+        nextLevelButton?.gameObject.SetActive(true);
+
+        // Hide fail buttons only
+        previousLevelButton?.gameObject.SetActive(false);
+        tryAgainButton?.gameObject.SetActive(false);
+    }
+    else
+    {
+        resultMessage.text = $"❌ Try Again! Avg HR: {roundedHR} BPM\nStay in the healthy zone.";
+
+        // Show fail buttons
+        nextLevelButton?.gameObject.SetActive(false);
+        previousLevelButton?.gameObject.SetActive(true);
+        tryAgainButton?.gameObject.SetActive(true);
+    }
+}
 
     public void ResetMonitor()
     {

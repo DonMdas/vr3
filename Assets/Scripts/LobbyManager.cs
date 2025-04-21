@@ -13,6 +13,7 @@ public class LobbyManager : MonoBehaviour
 
     public Button playButton;
     public Button exitButton;
+    public Button backButton; // <-- New Back Button
 
     public Button[] levelButtons; // Buttons for "Level 1" to "Level 5"
 
@@ -25,6 +26,7 @@ public class LobbyManager : MonoBehaviour
         // Hook up main buttons
         playButton.onClick.AddListener(ShowLevelPanel);
         exitButton.onClick.AddListener(ExitGame);
+        backButton.onClick.AddListener(BackToMainMenu); // <-- Hook up Back button
 
         // Map level buttons to load scenes
         for (int i = 0; i < levelButtons.Length; i++)
@@ -39,9 +41,15 @@ public class LobbyManager : MonoBehaviour
     void ShowLevelPanel()
     {
         if (panelMainMenu != null)
-            Destroy(panelMainMenu); // Or use SetActive(false) if you prefer
+            panelMainMenu.SetActive(false); // Use SetActive instead of Destroy
 
         panelLevelSelect?.SetActive(true);
+    }
+
+    void BackToMainMenu() // <-- New method
+    {
+        panelLevelSelect?.SetActive(false);
+        panelMainMenu?.SetActive(true);
     }
 
     void LoadLevel(string sceneName)

@@ -18445,7 +18445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 1441881575}
-  startTimeInSeconds: 10
+  startTimeInSeconds: 20
   isRunning: 1
 --- !u!1 &1248663679
 GameObject:
